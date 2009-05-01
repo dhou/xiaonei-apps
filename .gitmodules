@@ -1,0 +1,3 @@
+[submodule "buddywall/pyxn"]
+	path = buddywall/pyxn
+	url = git://github.com/houyr/pyxn.git
