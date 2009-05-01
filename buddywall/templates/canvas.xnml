@@ -1,0 +1,77 @@
+{% extends "base.xnml" %}
+{% load xn %}
+{% block content %}
+<style type="text/css">
+	.thumblist{
+		background:url({{bg_url}}) repeat;
+	}
+</style>
+<div style="margin-bottom:20px;">
+    <form action="refresh/" id="wall-form" method="post">
+        <div style="border-bottom: 1px dashed #ccc;padding-bottom:5px;">
+            <h2 style="margin-bottom:5px;">第一步：</h2>
+            <label for="wall-name">
+                给照片墙起个名字：
+            </label>
+            这是 <input class="input-text" type="text" name='wall-name' id='wall-name' value='{% if wall_name %}{{wall_name}}{% else %}{{username}}的好友照片墙{% endif %}' maxlength="200" style="width:300px;font-size:150%;"/>
+        </div>
+        <div style="border-bottom: 1px dashed #ccc;padding-bottom:5px;">
+            <h2 style="margin:15px 0 5px 0;">第二步：选一些好友的照片</h2>
+            <p>
+                <label for="selall">
+                    懒得选了，全都贴上去吧！
+                </label>
+                <input type="checkbox" checked="checked" name="selall" id="selall"/>（选中这个选项以后不论选了哪些朋友，所有照片都会贴上去）
+            </p>
+            <p>
+                <label for="notify">
+                    通知新上榜的好友
+                </label>
+                <input type="checkbox" checked="checked" name="notify" id="notify"/>（在刷完墙后通知最新荣登照片墙的好友，请他们来参观你的照片墙上他们的照片～）
+            </p>
+        </div>
+        <div style="border-bottom: 1px dashed #ccc;padding-bottom:5px;">
+            <h2 style="margin:15px 0 5px 0;"><img src="http://xnimg.cn/img/new2.gif"/> 第三步：选一张漂亮的墙纸</h2>
+			<div>
+				{% if bg_url %}<h3>当前选择的墙纸：<a href="{% xnurl choose_bg %}" title="选一款新的墙纸"><img src="{{bg_url}}"/></a></h3>{% else %}<h3>还没有选择墙纸呢，<a href="{% xnurl choose_bg %}">赶快去墙纸超市选一款自己满意的吧！</a></h3>{%endif%}
+			</div>
+        </div>
+        <div class="app-notice">
+            小提示：每刷一次墙，照片都会随机重新排列一次哦！
+        </div>
+        <div class="buttons">
+            <input type="submit" class="button btn_refresh" name="wallname-submit" value="搞定了，开始刷墙吧！"/>
+        </div>
+		<div class="myclearfix"></div>
+        <div class="thumblist">
+            <ul>
+                {% for u in uids %}
+                <li class="thumb">
+                    <div style="display:block;height:120px;">
+                        <div style="display:block;height:100px;">
+                            <p>
+                                <label for="sel-{{u.uid}}">
+                                    <xn:profile-pic uid="{{u.uid}}" linked="false"/>
+                                </label>
+                            </p>
+                            <p>
+                                <xn:name uid="{{u.uid}}" linked="true"/>
+                            </p>
+                        </div>
+                        <p style="bottom:0;">
+                            <input type="checkbox" name="selected[]"{% if u.selected%}checked="checked"{% endif%} value="{{u.uid}}" id="sel-{{u.uid}}"/>
+                        </p><input type="hidden" name="alluids[]" value="{{u.uid}}"/>
+                    </div>
+                </li>{% endfor %}
+            </ul>
+			<div class="myclearfix"></div>
+        </div>
+        <div class="buttons">
+            <input type="submit" class="button btn_refresh" name="wallname-submit" value="搞定了，开始刷墙吧！"/>
+        </div>
+    </form>
+</div>
+<div class="app-notice">
+    由于校内平台限制，目前好友照片数量上限是500张。我们正在和校内工程师沟通，争取尽快提高上限，有更新就会即时发布。请关注我们的<a href="http://group.xiaonei.com/GetTribe.do?id=248665269">用户交流群组</a>。
+</div>
+{% endblock %}

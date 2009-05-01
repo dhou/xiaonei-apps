@@ -1,0 +1,15 @@
+{% extends "base.xnml" %}
+{% load xn %}
+{% block content %}
+{% if refresh_ok %}
+<h2 style="margin-bottom: 5px;">照片墙已经成功更新了！现在就<a target="_blank" href="http://xiaonei.com/profile.do?id={{uid}}&v=app">点这里回自己主页的“应用”页面</a>去看看吧～</h2>
+{% else %}
+<div class="errors_div">
+	<h2 style="margin-bottom: 5px;">哟！抱歉，照片墙更新出现问题了！请返回<a href="{% xnurl canvas %}">重新刷一下墙</a>试试吧！</h2>
+</div>
+{% endif %}
+<div class="app-notice">
+    <img src="http://xnimg.cn/img/new2.gif"/>现在，每更新一次照片墙，照片排列顺序就会随机变化一次哦！
+	<p>如果发现主页上照片墙没有刷新，这是一个已知的校内平台的问题。校内把这个问题修复以后我们会在群组通知大家的。目前如果碰到这个问题，只能请多试试几次了，非常抱歉～</p>
+</div>
+{% endblock %}

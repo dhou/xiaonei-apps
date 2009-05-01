@@ -1,0 +1,1 @@
+<xn:name uid="{{uid}}" linked="true"/>邀请你也来玩<a href="{{app_url}}">好友照片墙</a>，把自己好友的照片都刷到主页上漂亮的照片墙上！现在就<a href="{{app_url}}">去看看吧</a>！你也可以先去参观一下<a href="http://xiaonei.com/getuserapp.do?id={{uid}}"><xn:name uid="{{uid}}" linked="false"/>的照片墙</a>哦！

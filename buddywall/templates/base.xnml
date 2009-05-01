@@ -1,0 +1,178 @@
+{% load xn %}
+<style>
+	.myclearfix{
+		display: block;
+		overflow: auto;
+	}
+	.info {
+        border: 1px dashed #ccc;
+        padding: 2px;
+        font-size: 11px;
+        background: #f1f1f1;
+        margin: 0 auto;
+    }
+    
+    .thumblist {
+        display: block;
+        padding: 5px;
+        margin: 10px 0;
+        border: solid 1px #ccc;
+        overflow: auto;
+        white-space: nowrap;
+        max-height: 500px;
+		height: 300px;
+		clear: both;
+    }
+    .thumblist ul{
+    	list-style-type: none;
+    }
+    .thumb {
+        width: 62px;
+        height: 125px;
+        float: left;
+        display: block;
+        margin-bottom: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        border-bottom: 1px solid #ccc;
+    }
+    .thumbimg{
+        width: 62px;
+        float: left;
+        display: block;
+        margin-bottom: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+	.paperlist{
+		height: 500px;
+	}
+    .box_head {
+        padding: 3px 6px;
+        color: #3b5998;
+        font-weight: bold;
+        text-align: left;
+        overflow: auto;
+        background: url({{MEDIA_URL}}images/bar-bg.gif) repeat-x left top;
+        height: 24px;
+    }
+    
+    .box_head h3 {
+        float: left;
+    }
+    
+    .box_head .more {
+        float: right;
+    }
+    
+    .input-text {
+        background-color: #FFFFFF;
+        color: #777;
+        font-size: 150%;
+        padding: 3px 5px 3px 5px;
+        height: auto;
+        border: 1px solid #ccc;
+        width: 400px;
+    }
+    
+    .input-text:hover, .input-text:focus {
+        background-color: #F0FFE6;
+        border: 1px solid #10BAE0;
+    }
+	.buttons {
+        overflow: auto;
+        margin: 10px 0;
+        display: block;
+		clear: both;
+    }
+    
+    .button {
+        float: left;
+        display: block;
+        border: 1px solid;
+        border-color: #eee #dedede #dedede #eee;
+        line-height: 150%;
+        text-decoration: none;
+        font-weight: bold;
+        background-color: #f5f5f5;
+        margin: 0 2px;
+        padding: 5px 10px 5px 26px;
+        cursor: pointer;
+        font-size: 100%;
+        color: #565656;
+    }
+    
+    .button:hover, a.pagebtn:hover {
+        background-color: #DFF4FF;
+        color: #336699;
+        border: 1px solid #C2E1EF;
+    }
+    
+    .button:active {
+        background-color: #6299C5;
+        color: #FFF;
+    }
+	.btn_notify{
+		background: #f5f5f5 url({{MEDIA_URL}}images/group_go.png) 5px 50% no-repeat;
+	}
+	.btn_refresh{
+		background: #f5f5f5 url({{MEDIA_URL}}images/arrow_refresh.png) 5px 50% no-repeat;
+	}
+	.btn_choose{
+		background: #f5f5f5 url({{MEDIA_URL}}images/accept.png) 5px 50% no-repeat;
+	}
+	.steps {
+        margin-bottom: 10px;
+        padding: 10px;
+        border-bottom: 1px dashed #ccc;
+    }
+    .step {
+        font-size: 120%;
+    }
+</style>
+<xn:title text="好友照片墙"/>
+<div>
+    <img src="{{MEDIA_URL}}images/banner800.jpg"/>
+</div>
+<div style="margin:0;padding:10px;">
+    <div id="sub-nav" style="padding-top:0;border-bottom: 0pt none; display: block; width: 100%;">
+        <ul style="overflow:hidden;">
+            <li {% ifequal current 'home' %} class="selected" {% endifequal %}>
+                <a href="{% xnurl canvas %}">我的照片墙</a>
+            </li>
+            <li {% ifequal current 'whohasme' %} class="selected" {% endifequal %}>
+                <a href="{% xnurl who_has_me %}">看看我的照片在谁墙上</a>
+            </li>
+            <li {% ifequal current 'choosebg' %} class="selected" {% endifequal %}>
+                <a href="{% xnurl choose_bg %}"><img src="http://xnimg.cn/img/new2.gif"/> 墙纸超市</a>
+            </li>
+            <li {% ifequal current 'invite' %} class="selected" {% endifequal %}>
+                <a href="{% xnurl invite %}">邀请朋友一起玩</a>
+            </li>
+        </ul>
+    </div>
+    <div class="box">
+        <h3 style="margin-bottom:0;background: url({{MEDIA_URL}}images/bar-bg.gif) repeat-x left top;">
+        	{% ifequal current 'home' %}更新我的照片墙{% endifequal %}
+        	{% ifequal current 'choosebg' %}给照片墙选一款漂亮的墙纸{% endifequal %}
+			{% ifequal current 'whohasme' %}看看我的照片在谁墙上{% endifequal %}
+			{% ifequal current 'invite' %}邀请朋友一起来玩{% endifequal %}
+		</h3>
+        <div class="more">
+            <a target="_blank" href="http://group.xiaonei.com/GetTribe.do?id=248665269">用户讨论交流群组</a>
+        </div>
+    </div>
+	<div style="margin-top:-11px;border-top: 1px solid #cccccc; padding: 3px 0; margin-bottom: 3px; background-color: #eeeeee; text-align: center; overflow: auto;">
+	    <a target="_blank" href="http://app.xiaonei.com/apps/application.do?id=15634" title="册封自己的死党，给好友们颁发大奖，提升自己的人气，来玩最新的死党爬行榜！">死党爬行榜</a>
+	    <span class="pipe">|</span>
+		<a target="_blank" href="http://app.xiaonei.com/apps/application.do?id=17749" title="一起来玩故事接龙游戏，看看故事在大家笔下会发展成什么样子！">故事接龙大擂台</a>
+	    <span class="pipe">|</span>
+		<a target="_blank" href="http://app.xiaonei.com/apps/application.do?id=18647" title="向大家说出自己的想法，给大家的想法投票，用奇思妙想聚集自己的粉丝！">很有想法！</a>
+	</div>
+	{% block content %}
+	{% endblock %}
+</div>
+<xn:iframe src="{{MEDIA_URL}}urchin.html" frameborder="0" width="1" height="1" scrolling="no"/> 
+{% if iframe_src %}
+<xn:iframe src="{{iframe_src}}" frameborder="0" width="1" height="1" scrolling="no"/>
+{% endif %}

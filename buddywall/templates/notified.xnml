@@ -1,0 +1,4 @@
+{% extends "base.xnml" %}
+{% block content %}
+<h2 style="margin-bottom: 5px;">通知完毕！这些朋友可能很快就会把我的照片show在自己的墙上拉～</h2>
+{% endblock %}

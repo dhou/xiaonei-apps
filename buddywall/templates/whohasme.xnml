@@ -1,0 +1,35 @@
+{% extends "base.xnml" %}
+{% load xn %}
+{% block content %}
+    {% if uids %}
+    <div class="box">
+        <h3>我的照片已经登上{{uids|length}}个朋友的照片墙了，耶～</h3>
+    </div>
+	<div style="padding:0;*padding:5px;border:1px dashed #ccc;overflow:auto;">
+		<ul style="list-style-type:none;">
+	        {% for u in uids %}
+	        <li style="height:75px;width:50px;float:left;display:block;margin:0 2px 0 0;white-space:nowrap;overflow:hidden;">
+	            <div style="display:block;height:75px;width:50px;">
+	                <p><xn:profile-pic uid="{{u}}" linked="true"/></p>
+	            </div>
+	        </li>
+			{% endfor %}
+	    </ul>
+	</div>
+    {% else %}
+    <div class="box">
+        <h3>
+        失败……我的靓照还没有登上任何朋友的照片墙。赶快邀请他们一起来玩吧！
+		</h3>
+    </div>
+    {% endif %}
+	<div style="margin:10px auto;">
+	<form action="notify/" id="notify-form" method="post">
+	<h2>还有{{diff|length}}个朋友还没把我的照片贴上他们自己的照片墙，</h2>
+	<div class="buttons"><input type="submit" class="button btn_notify" name="wallname-submit" value="发个通知请他们也快来贴上我的照片吧！"/> </div>
+	{% for u in diff %}
+	<input type="hidden" name="uids[]" value="{{u}}"/>
+	{% endfor %}
+	</form>
+	</div>
+{% endblock %}

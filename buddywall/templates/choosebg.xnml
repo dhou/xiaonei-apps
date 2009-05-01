@@ -1,0 +1,50 @@
+{% extends "base.xnml" %}
+{% load xn %}
+{% block content %}
+<style type="text/css">
+	li.bg_grid{
+		width:150px;height:160px;float:left;display:block;margin-bottom:5px;white-space:nowrap;overflow:hidden;border-bottom:1px solid #ccc;
+	}
+</style>
+<div style="margin-bottom:20px;">
+        <div class="app-notice">
+        	<h2>墙纸超市现有{{total_bgs}}款墙纸式样，您目前可以选择所有的墙纸。</h2>
+			<h2>回报用户，超市商品开始全面免费开放～请大家尽情选择喜欢的墙纸吧！<a href="{% xnurl invite %}">别忘了告诉朋友也一起来哦！</a></h2>
+        </div>
+    <form action="setbg/" id="bg-form" method="post">
+        <div class="buttons">
+            <input type="submit" class="button btn_choose" name="bgstyle-submit" value="选定墙纸款式"/>
+        </div>
+		<div class="myclearfix"></div>
+        <div class="thumblist paperlist">
+            <ul>
+                {% for id, val in bg_styles.items %}
+                <li class="bg_grid">
+                    <div style="display:block;height:140px;">
+                        <div style="display:block;height:140px;">
+                            <p>
+                                <label for="patt_{{id}}">
+                                	{% if val %}
+                                    <img src='{{val}}' id="bg_{{id}}"/>
+									{% else %}
+									不要墙纸
+									{% endif %}
+                                </label>
+                            </p>
+                        </div>
+                        <p style="bottom:0;">
+                            <input type="radio" name="selected[]" {% ifequal current_bg id%}checked="checked"{% endifequal %} value="{{id}}" id="patt_{{id}}"/>
+							<label for="patt_{{id}}">选这款</label>
+                        </p>
+                    </div>
+                </li>
+				{% endfor %}
+            </ul>
+        </div>
+        <div class="myclearfix"></div>
+        <div class="buttons">
+            <input type="submit" class="button btn_choose" name="bgstyle-submit" value="选定墙纸款式"/>
+        </div>
+    </form>
+</div>
+{% endblock %}

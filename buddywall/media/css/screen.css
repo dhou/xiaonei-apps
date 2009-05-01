@@ -1,0 +1,10 @@
+body {
+    font-family: 'Trebuchet MS', 'Lucida Grande', Helvetica, Verdana, Arial, Sans-Serif;
+}
+.info{
+	border: 1px dashed #ccc;
+	padding: 2px;
+	font-size: 11px;
+	background: #f1f1f1;
+	margin: 0 auto;
+}

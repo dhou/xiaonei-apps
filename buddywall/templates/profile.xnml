@@ -1,0 +1,24 @@
+{% load xn %}
+<p class="grey">
+    <a href="{{app_url}}">更新我的照片墙</a>
+    <span class="pipe">|</span>
+    <a href="{% xnurl who_has_me %}">我的照片在谁墙上？</a>
+    <span class="pipe">|</span>
+    <xn:name uid="profileowner"/>的墙上有{{num_buddies}}张好友照片了
+</p>
+<h2 style="background: url({{media_url}}images/bar-bg.gif) repeat-x left top;border: 1px solid #ddd; margin: 5px 0pt; padding: 3px;">这是{% if wall_name %}{{wall_name}}{% else %}{{username}}的好友照片墙{% endif %}</h2>
+{% if bg_url %}
+<div style="overflow:auto;padding:10px;*padding:15px;background:url({{bg_url}}) repeat;">
+{% else %}
+<div style="padding:0;*padding:5px;">
+{% endif %}
+	<ul style="list-style-type:none;">
+        {% for u in uids %}
+        <li style="height:75px;width:50px;float:left;display:block;margin:0 2px 0 0;white-space:nowrap;overflow:hidden;">
+            <div style="display:block;height:75px;width:50px;">
+                <p><xn:profile-pic uid="{{u}}" linked="true"/></p>
+            </div>
+        </li>{% endfor %}
+    </ul>
+	<div style="display:block;clear:both;"></div>
+</div>

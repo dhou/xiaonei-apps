@@ -1,0 +1,1 @@
+<xn:name uid="{{uid}}" linked="true"/>新建了一面pp的<a href="{{app_url}}">好友照片墙</a>，你的靓照已经被贴上去了！现在就去<a href="http://xiaonei.com/getuserapp.do?id={{uid}}"><xn:name uid="{{uid}}" linked="false"/>的照片墙</a>看看吧！你也有<a href="{{app_url}}">自己的照片墙</a>了吗？
