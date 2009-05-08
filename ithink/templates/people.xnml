@@ -1,0 +1,36 @@
+{% extends "base.xnml" %}
+{% load xn %}
+{% block title %} 很有想法  | 名人堂{% endblock %}
+{% block content %}
+<div class="new-media-shell clearfix" style="margin-bottom:5px;">
+    <a href="{% xnurl new %}" class="new-media">
+        <div class="tr">
+            <div class="bl">
+                <div class="br">
+                    <span>提出新想法</span>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
+<div id="sub-nav" style="border-bottom: 0pt none; display: block; float: left; clear: left;width: 100%;">
+    <ul style="overflow:hidden;">
+        <li {% ifequal cat 'followers' %} class="selected" {% endifequal %}>
+            <a href="{% xnurl people_cat "followers"%}">粉丝最多</a>
+        </li>
+        <li {% ifequal cat 'thoughts' %} class="selected" {% endifequal %}>
+            <a href="{% xnurl people_cat "thoughts"%}">想法最多</a>
+        </li>
+        <li {% ifequal cat 'votes' %} class="selected" {% endifequal %}>
+            <a href="{% xnurl people_cat "votes"%}">投票最多</a>
+        </li>
+        <li {% ifequal cat 'comments' %} class="selected" {% endifequal %}>
+            <a href="{% xnurl people_cat "comments"%}">评论最多</a>
+        </li>
+        <li {% ifequal cat 'latest' %} class="selected" {% endifequal %}>
+            <a href="{% xnurl people_cat "latest"%}">最新加入</a>
+        </li>
+    </ul>
+</div>
+<xn:iframe src="{{iframe_src}}" frameborder="0" width="778" height="800" scrolling="auto"/>
+{% endblock %}

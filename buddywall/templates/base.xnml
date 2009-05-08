@@ -172,7 +172,6 @@
 	{% block content %}
 	{% endblock %}
 </div>
-<xn:iframe src="{{MEDIA_URL}}urchin.html" frameborder="0" width="1" height="1" scrolling="no"/> 
 {% if iframe_src %}
 <xn:iframe src="{{iframe_src}}" frameborder="0" width="1" height="1" scrolling="no"/>
 {% endif %}

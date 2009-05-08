@@ -1,0 +1,42 @@
+{% load xn %}
+{% ifequal type "agrees" %}
+<div class="paginator-bar">
+    <h3>投赞成票的人</h3>
+</div>
+<div class="box-sub">
+	<div id="spinner_agrees" class="spinner hidden"></div>
+    {% if has_prev %}<a href="#" id="prev_agrees" class="link-prev">前{{page_len}}个</a>{% endif %} 
+    {% if has_prev and has_next %} <span>|</span>
+    {% endif %}
+    {% if has_next %}<a href='#' id='next_agrees' class="link-next">后{{page_len}}个</a>{% endif %}
+</div>
+<ul id="agreed_list" class="thumb-list">
+{% else %}
+<div class="paginator-bar">
+    <h3>投反对票的人</h3>
+</div>
+<div class="box-sub">
+	<div id="spinner_disagrees" class="spinner hidden"></div>
+    {% if has_prev %}<a href="#" id="prev_disagrees" class="link-prev">前{{page_len}}个</a>{% endif %} 
+    {% if has_prev and has_next %} <span>|</span>
+    {% endif %}
+    {% if has_next %}<a href='#' id='next_disagrees' class="link-next">后{{page_len}}个</a>{% endif %}
+</div>
+<ul id="disagreed_list" class="thumb-list">
+    {% endifequal %}
+    {% for v in voters %}
+    <li class="voter">
+        <div class="person-box">
+            <div class="thumb">
+                <a target="_parent" href="{% xnurl profile_def v.uid %}"><img src="{{v.pic_url}}"/></a>
+            </div>
+            <div class="person-info">
+                <p>
+                    {{v.username}}
+                </p>
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+    {% ifequal type "agrees" %}<input type="hidden" id="offset_agrees" name="agreed_offset" value="{{offset}}"/>{% else %}<input type="hidden" id="offset_disagrees" name="disagreed_offset" value="{{offset}}"/>{% endifequal %}
+</ul>

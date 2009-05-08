@@ -1,0 +1,6 @@
+{% extends "base.xnml" %}
+{% block content %}
+<xn:invite-form action="">
+    <xn:multi-friend-selector/><input type="submit" class="inputsubmit" value="邀请好友来分享自己的想法"/>
+</xn:invite-form>
+{% endblock %}

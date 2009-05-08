@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% load xn %}
+{% block customjs %}
+<script type="text/javascript" language="JavaScript">
+    $(function(){
+		function updatePreviewOp(e){
+			var op = $('#thought_text').val();
+			if(op.length){
+				$('#pre_thought').html(op);
+			}else{
+				$('#pre_thought').html('我的想法预览');
+			}
+		}
+		function updatePreviewNote(e){
+			var op = $('#note_text').val();
+			$('#pre_note').html(op);
+		}
+		function updateOpCounter(e){
+			var num_chars = $('#thought_text').val().length;
+			var counter = 140 - num_chars;
+			$('#thought_counter').html(counter==0?'0':counter);
+			if(counter <0){
+				$('#btn_publish').addClass('btn-disabled').unbind('click');
+				return false;
+			}else{
+				$('#btn_publish').removeClass('btn-disabled').click(createOpinion);
+				return true;
+			}
+		}
+		function updateTagsCounter(e){
+			var num_chars = $('#tags_text').val().length;
+			var counter = 140 - num_chars;
+			$('#tags_counter').html(counter==0?'0':counter);
+			if(counter <0){
+				$('#btn_publish').addClass('btn-disabled').unbind('click');
+				return false;
+			}else{
+				$('#btn_publish').removeClass('btn-disabled').click(createOpinion);
+				return true;
+			}
+		}
+		function updateNoteCounter(e){
+			var num_chars = $('#note_text').val().length;
+			var counter = 140 - num_chars;
+			$('#note_counter').html(counter==0?'0':counter);
+			if(counter <0){
+				$('#btn_publish').addClass('btn-disabled').unbind('click');
+				return false;
+			}else{
+				$('#btn_publish').removeClass('btn-disabled').click(createOpinion);
+				return true;
+			}
+		}
+		function createOpinion(e){
+			e.preventDefault();
+			if(validate(e)){
+	            $.ajax({
+	                url: '{% url create_thought %}',
+	                data: $('#newthought-form').serialize(),
+	                dataType: 'json',
+	                timeout: 20000,
+	                beforeSend: function(){
+	                    $('#btn_publish').addClass('btn-disabled').html('请稍候...').unbind('click');
+	                    hideInfo();
+	                    hideError();
+	                },
+	                success: function(data){
+						$('#btn_publish').html('发表新想法').removeClass('btn-disabled').click(createOpinion);;
+						$('#thought_text').val('');
+						$('#tags_text').val('');
+						$('#note_text').val('');
+	                    showInfoDlg('新想法成功发布。<a target="_parent" href="'+data.url+'">请点这个链接直接浏览新发布的想法</a>',e);
+	                    showInfo('新想法成功发布。<a target="_parent" href="'+data.url+'">请点这个链接直接浏览新发布的想法</a>');
+						parent.window.location = data.url;
+	                },
+	                error: function(){
+	                    showErrorDlg('发布新想法失败，请重试一次。',e);
+	                    $('#btn_publish').removeClass('btn-disabled').html('发表新想法').click(createOpinion);
+	                },
+	                type: 'POST'
+	            });
+			}
+		}
+		function validate(e){
+			var thought = $('#thought_text').val();
+			if($.trim(thought).length <= 0){
+				showErrorDlg('你的想法是什么？还没填呢！',e);
+				return false;
+			}else if($.trim(thought).length > 140){
+				showErrorDlg('你的想法太长了，想办法精简一下吧！',e);
+				return false;
+			}else{
+				return true;
+			}
+		}
+		$('#thought_text').keyup(updateOpCounter).focus(updateOpCounter).blur(updateOpCounter).keyup(updatePreviewOp).blur(updatePreviewOp);
+		$('#tags_text').keyup(updateTagsCounter).focus(updateTagsCounter).blur(updateTagsCounter);
+		$('#note_text').keyup(updateNoteCounter).focus(updateNoteCounter).blur(updateNoteCounter).keyup(updatePreviewNote).blur(updatePreviewNote);;
+		$('#btn_publish').click(createOpinion);
+    });
+</script>
+{% endblock %}
+{% block content %}
+<div class="content">
+    <div class="box-container">
+    	<form id="newthought-form">
+        <div class="content-wrapper">
+            <div class="content-box">
+                <h1>1. 我的想法：</h1>
+                <h3>还剩<span id="thought_counter">140</span>个字</h3>
+                <input type="text" class="input-text" name="thought" id="thought_text"></input>
+            </div>
+        </div>
+        <div class="content-wrapper">
+            <div class="content-box">
+                <h1>2. 主题标签：</h1>
+                <h3>还剩<span id="tags_counter">140</span>个字</h3>
+				<p class="input-note">描述想法主题的关键词，可以方便大家发现你的想法，用逗号或空格分隔（可选）</p>
+                <input type="text" class="input-text" name="tags" id="tags_text">
+                </input>
+            </div>
+        </div>
+        <div class="content-wrapper">
+            <div class="content-box">
+                <h1>3. 附加说明：</h1>
+                <h3>还剩<span id="note_counter">140</span>个字</h3>
+				<p class="input-note">对本想法更多的解释说明（可选）</p>
+                <input type="text" class="input-text" name="note" id="note_text">
+                </input>
+            </div>
+        </div>
+		<div>
+			<input type="checkbox" name="notify" id="chk_notify" checked="checked"/><label for="chk_notify">通知好友把新想法告诉他们</label>
+		</div>
+		<input type="hidden" name="uid" value="{{uid}}"/>
+		<input type="hidden" name="session_key" value="{{session_key}}"/>
+		</form>
+        <div class="buttons clearfix clear-both">
+            <a class="button btn-publish" id="btn_publish">发表新想法</a>
+        </div>
+		<div class="clearfix clear-both"></div>
+		<div class="info hidden clear-both" id="info_msg">
+	    </div>
+	    <div class="errors hidden clear-both" id="errors_msg">
+	    </div>
+	    <div class="clearfix clear-both"/>
+        <div class="preview-box detail-box">
+            <div class="thought" id="pre_thought">
+                我的想法预览
+            </div>
+            <div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td class="thumb">
+                                <img src="{{user_pic}}"/>
+                            </td>
+                            <td>
+                                <div class="note" id="pre_note"></div>
+								<div class="author-info">
+									<div class="float-left">{{username}}在0秒前提出</div>
+									<div class="float-right agree-text">同意该想法</div>
+								</div>
+								<div class="vote-results">1个投票，100%同意</div>
+								<div class="vote-actions">
+									<a class="link-comment" href="#">评论</a>
+									<a class="link-ask" href="#">问问朋友怎么想</a>
+								</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="content">
+            </div>
+        </div>
+    </div>
+</div>{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load xn %}
+{% block customjs %}
+<script type="text/javascript" language="JavaScript">
+    $(function(){
+		$('abbr[class*=timeago]').timeago();
+    });
+</script>
+{% endblock %}
+{% block content %}
+<div class="content">
+	<div class="info hidden clear-both" id="info_msg">
+    </div>
+    <div class="errors hidden clear-both" id="errors_msg">
+    </div>
+	<div class="clearfix"/>
+    <div class="box_container">
+    	<div class="paginator-bar">
+    		{% if has_prev %}<a target="_parent" href="{% xnurl my_stuff_sorted stuff=stuff,offset=prev_offset %}" id="prev" class="link-prev">前{{page_len}}条</a>{% endif %}
+			{% if has_prev and has_next %} <span>|</span> {% endif %}
+			{% if has_next %}<a target="_parent" href="{% xnurl my_stuff_sorted stuff=stuff,offset=offset %}" id='next' class="link-next">后{{page_len}}条</a>{% endif %}
+    	</div>
+		{% ifequal stuff 'followers'%}
+    	<ul class="thumb-list">
+    	{% else %}
+			{% ifequal stuff 'followings'%}
+	    	<ul class="thumb-list">
+	    	{% else %}
+			<ul>
+	    	{% endifequal %}
+    	{% endifequal %}
+		
+		{% for s in obj_list %}
+		<li>
+			{% ifequal stuff "notes" %}
+			<div class="compact-box">
+	            <div class="content">
+	                <table>
+	                    <tbody>
+	                        <tr>
+	                            <td class="thumb">
+	                                <a target="_parent" href="{% xnurl profile_def s.from_user.uid %}"><img src="{{s.from_user.pic_url}}"/></a>
+	                            </td>
+	                            <td>
+	                                <div class="notemsg">{{s.content}}</div>
+									<div class="author-info">
+										<div class="float-left">{{s.from_user}}在<abbr class="timeago" title="{{s.date_created_str}}">{{s.date_created_str}}</abbr>留言</div>
+									</div>
+	                            </td>
+	                        </tr>
+	                    </tbody>
+	                </table>
+	            </div>
+	        </div>
+			{% else %}
+				{% ifequal stuff 'followers'%}
+				<div class="person-box">
+		            <div class="thumb">
+		                <a target="_parent" href="{% xnurl profile_def s.uid %}"><img src="{{s.pic_url}}"/></a>
+		            </div>
+		            <div class="person-info">
+						<p>{{s.username}}</p>
+		            </div>
+		        </div>
+				{% else %}
+					{% ifequal stuff 'followings' %}
+					<div class="person-box">
+			            <div class="thumb">
+			                <a target="_parent" href="{% xnurl profile_def s.uid %}"><img src="{{s.pic_url}}"/></a>
+			            </div>
+			            <div class="person-info">
+							<p>{{s.username}}</p>
+			            </div>
+			        </div>
+					{% endifequal %}
+				{% endifequal %}
+			{% endifequal %}
+		</li>
+		{% endfor %}
+		</ul>
+    </div>
+</div>{% endblock %}

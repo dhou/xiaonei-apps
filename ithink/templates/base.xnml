@@ -1,0 +1,65 @@
+{% load xn %}
+<style>
+.feature-div{
+	margin: 5px 0;
+	border: 1px solid #ccc;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+.feature-banner{
+	font-size: 16px;
+	margin: 5px auto;
+	width: 100px;
+}
+</style>
+<xn:title text="{% block title %}很有想法{% endblock %}"/>
+<div>
+    <img src="{{MEDIA_URL}}images/banner800.jpg"/>
+</div>
+<div style="margin:0;padding:10px;">
+    <div id="sub-nav" style="padding-top:0;border-bottom: 0pt none; display: block; width: 100%;">
+        <ul style="overflow:hidden;">
+            <li {% ifequal current 'home' %} class="selected" {% endifequal %}>
+                <a href="{% xnurl home %}">大家的想法</a>
+            </li>
+			<li {% ifequal current 'tags' %} class="selected" {% endifequal %}>
+				<a href="{% xnurl tag_view_browse %}">浏览主题</a>			
+			</li>
+			<li {% ifequal current 'people' %} class="selected" {% endifequal %}>
+				<a href="{% xnurl people_def %}">名人堂</a>
+			</li>
+			<li {% ifequal current 'my' %} class="selected" {% endifequal %}>
+				<a href="{% xnurl my_def %}">我的休息室</a>			
+			</li>
+			<li {% ifequal current 'new' %} class="selected" {% endifequal %}>
+				<a href="{% xnurl new %}">新想法</a>
+			</li>
+			<li {% ifequal current 'invite' %} class="selected" {% endifequal %} style="float:right;margin-right:20px;"><a href="{% xnurl invite %}">邀请朋友一起玩</a></li>
+        </ul>
+    </div>
+    <div class="box">
+        <h3 style="margin-bottom:0;background: url({{MEDIA_URL}}images/bar-bg.gif) repeat-x left top;">{% switch current %}
+		{% case 'home' %}大家在想什么{% endcase %}
+		{% case 'tags' %}浏览主题相关的想法{% endcase %}
+		{% case 'my' %}我的休息室 | 查看我的相关信息{% endcase %}
+		{% case 'people' %}思想名人堂 | 很有想法的人{% endcase %}
+		{% case 'new' %}提出一个新想法{% endcase %}
+		{% case 'invite' %}邀请朋友也来提出自己的想法{% endcase %}
+		{%endswitch%}</h3>
+        <div class="more">
+            <a target="_blank" href="http://group.xiaonei.com/GetTribe.do?id=248665269">访问使用交流群组</a>
+        </div>
+    </div>
+	<div style="margin-top:-11px;border-top: 1px solid #cccccc; padding: 3px 0; margin-bottom: 3px; background-color: #eeeeee; text-align: center; overflow: auto;">
+	    <a target="_blank" href="http://app.xiaonei.com/apps/application.do?id=14224" title="把好朋友的照片都刷到自己主页上，做一面漂亮的照片墙！">好友照片墙</a>
+	    <span class="pipe">|</span>
+		<a target="_blank" href="http://app.xiaonei.com/apps/application.do?id=15634" title="册封自己的死党，给好友们颁发大奖，提升自己的人气，来玩最新的死党爬行榜！">死党爬行榜</a>
+		<span class="pipe">|</span>
+		<a target="_blank" href="http://app.xiaonei.com/apps/application.do?id=17749" title="一起来玩故事接龙游戏，看看故事在大家笔下会发展成什么样子！">故事接龙大擂台</a>
+	</div>
+	{% block content %}
+	{% endblock %}
+</div>
+{% if session_iframe %}
+<xn:iframe src="{{session_iframe}}" frameborder="0" width="1" height="1" scrolling="no"/>
+{% endif %}

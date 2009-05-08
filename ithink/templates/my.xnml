@@ -1,0 +1,79 @@
+{% extends "base.xnml" %}
+{% load xn %}
+{% block title %} 很有想法  | 我的休息室{% endblock %}
+{% block content %}
+<div class="new-media-shell clearfix" style="margin-bottom:5px;">
+    <a href="{% xnurl new %}" class="new-media">
+        <div class="tr">
+            <div class="bl">
+                <div class="br">
+                    <span>提出新想法</span>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
+<div class="gray-box">
+    <table>
+    	<tbody>
+    		<tr>
+    			<td><xn:profile-pic uid="{{uid}}" linked="true" size="normal"/></td>
+    			<td style="padding:0 5px;">
+				<h3><xn:name uid="{{uid}}" linked="false"/></h3>
+				<p>提出的想法：{{num_thoughts}}个</p>
+				<p>投票：{{num_votes}}次</p>
+				<p>发表的评论：{{num_comments}}条</p>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div id="sub-nav" style="border-bottom: 0pt none; display: block; float: left; clear: left;width: 100%;">
+    <ul style="overflow:hidden;">
+        <li {% ifequal stuff 'thoughts' %} class="selected" {% endifequal %}>
+            <a href="{% xnurl my_stuff_def "thoughts"%}">我的想法</a>
+        </li>
+        <li {% ifequal stuff 'notes' %} class="selected" {% endifequal %}>
+            <a href="{% xnurl my_stuff_def "notes"%}">我的留言</a>
+        </li>
+        <li {% ifequal stuff 'followers' %} class="selected" {% endifequal %}>
+            <a href="{% xnurl my_stuff_def "followers"%}">我的粉丝</a>
+        </li>
+        <li {% ifequal stuff 'followings' %} class="selected" {% endifequal %}>
+            <a href="{% xnurl my_stuff_def "followings"%}">我关注的人</a>
+        </li>
+    </ul>
+</div>
+{% ifequal stuff "thoughts" %}
+<div style="border-top: 1px solid #cccccc; padding: 3px 0; margin-bottom: 3px; background-color: #eeeeee; text-align: center; overflow: auto;">
+    <a href="{% xnurl my_thoughts_cat_def "created" %}" title="浏览我提出的想法">
+    	{% ifequal cat "created"%}<span style="background:#6D84B4;color:#fff;">我提出的想法</span>
+		{%else%}
+		我提出的想法
+		{%endifequal%}
+	</a>
+    <span class="pipe">|</span>
+    <a href="{% xnurl my_thoughts_cat_def "voted" %}" title="浏览我投过票的想法">
+    	{% ifequal cat "voted"%}<span style="background:#6D84B4;color:#fff;">我投过票的想法</span>
+		{%else%}
+    		我投过票的想法
+		{% endifequal %}
+	</a>
+    <span class="pipe">|</span>
+    <a href="{% xnurl my_thoughts_cat_def "commented" %}" title="浏览我评论过的想法">
+    	{% ifequal cat "commented"%}<span style="background:#6D84B4;color:#fff;">我评论过的想法</span>
+		{% else %}
+    	我评论过的想法
+		{% endifequal %}
+	</a>
+    <span class="pipe">|</span>
+    <a href="{% xnurl my_thoughts_cat_def "received" %}" title="浏览别人推荐给我的想法">
+    	{% ifequal cat "received"%}<span style="background:#6D84B4;color:#fff;">推荐给我的想法</span>
+		{% else %}
+    	推荐给我的想法
+		{% endifequal %}
+	</a>
+</div>
+{% endifequal %}
+<xn:iframe src="{{iframe_src}}" frameborder="0" width="778" height="1300" scrolling="auto"/>
+{% endblock %}

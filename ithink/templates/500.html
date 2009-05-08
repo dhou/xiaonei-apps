@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load xn %}
+{% block content %}
+<div class="bubble">
+    <div class="top"></div>
+    <div class="body">
+        <img src="{{img}}"/>
+		<div class="float-left"><h1>啊！校内服务器发生故障了！</h1>
+		<p>很有想法的这个页面暂时无法打开。现在有几种选择：</p>
+		<p><ul>
+			<li><a href="javascript:window.location.reload();">刷新一下页面</a>，可能就会恢复</li>
+			<li><a href="javascript:window.location.reload();">再刷新一下页面</a>，可能就会恢复</li>
+			<li>...</li>
+			<li>如果还是看到这个页面，抱歉～请稍后再访问。也请<a target="_blank" href="http://group.xiaonei.com/GetTribe.do?id=248665269">访问我们的交流群组</a>，报告你的问题，也可以看到我们发出的最新通知。</li>
+		</ul></p>
+		</div>
+    </div>
+    <div class="bottom">
+    </div>
+</div>
+{% endblock %}

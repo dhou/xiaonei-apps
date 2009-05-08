@@ -1,0 +1,49 @@
+{% extends "admin/base.html" %}
+{% block customjs %}
+<script type="text/javascript" language="JavaScript">
+    $(function(){
+		$('abbr[class*=timeago]').timeago();
+	});
+</script>
+{% endblock %}
+{% block content %}<h1>Hello {{g_user}}!</h1>
+<a href="{{logout_url}}">Logout</a>
+{% if latest_feature %}<h2>最新今日推荐：{{latest_feature.thought}}</h2>
+{% endif %}
+<form action="" method="post">
+    <input type="submit" name="featured_submit" value="提交"/>
+    <table>
+        <tbody>
+            <tr>
+            	<th>提出者</th>
+                <th>
+                    想法
+                </th>
+                <th>
+                    创建时间
+                </th>
+                <th>
+                    设为今日推荐
+                </th>
+            </tr>
+            {% for t in thoughts %}
+            <tr>
+            	<td>
+            		<img src="{{t.owner.pic_url}}"/>{{t.owner}}
+            	</td>
+                <td>
+                    {{t}}
+                </td>
+                <td>
+                    <abbr class="timeago" title="{{t.date_created_str}}">{{t.date_created_str}}</abbr>
+                </td>
+                <td>
+                    <label for="featured_{{t.key.id}}">
+                        选定
+                    </label>
+                    <input type="radio" id='featured_{{t.key.id}}' name='set_featured' value='{{t.key.id}}'/>
+                </td>
+            </tr>{% endfor %}
+        </tbody>
+    </table><input type="submit" name="featured_submit" value="提交"/>
+</form>{%endblock %}

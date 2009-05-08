@@ -1,0 +1,28 @@
+<ul>
+	{% for r in replies %}
+	<li>
+		<div class="thumb"><img src="{{r.author.pic_url}}" width="50"/></div>
+		<div class="comment-content">
+			<div class="comment-info">
+				<div class="float-left">{{r.author.username}} <abbr class="timeago" title='{{r.get_formated_date}}'>{{r.get_formated_date}}</abbr></div>
+				<div class="float-right">{% if r.voted %}{% if r.agreed %}<span class="agree-text">同意</span>{% else %}<span class="disagree-text">不同意</span>{% endif %}{% endif %}</div>
+			</div>
+			<div class="comment-text">{{r.content}}</div>
+		</div>
+		<div class="replies hidden" id="replies_{{r.key.id}}"></div>
+		<div class="new-reply hidden" id="new_reply_{{r.key.id}}">
+			<form action="{% url new_reply %}" id="form_reply_{{r.key.id}}">
+				<textarea rows="2" cols="40" class="input-text" name="reply" id="replytext_{{r.key.id}}"></textarea>
+				<div class="buttons">
+					<a href="#" class="button btn-publish reply-publish" id="btnreply_{{r.key.id}}">发表</a>
+					<a href="#" class="button btn-cancel reply-cancel" id="btncancel_{{r.key.id}}">取消</a>
+				</div>
+				<input type="hidden" name="uid" value="{{uid}}"/>
+				<input type="hidden" name="session_key" value="{{session_key}}"/>
+				<input type="hidden" name="thought_id" value="{{r.thought.key.id}}"/>
+				<input type="hidden" name="comment_id" value="{{r.key.id}}"/>
+			</form>
+		</div>
+	</li>
+	{% endfor %}
+</ul>

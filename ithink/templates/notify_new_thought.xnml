@@ -1,0 +1,1 @@
+<a href="{{profile_url}}"><xn:name uid="{{uid}}" linked="false"/></a>想知道你是不是同意{%ifequal sex 1%}他{%else%}她{%endifequal%}的想法：“<a href="{{thought_url}}">{{thought}}</a>”，快来<a href="{{thought_url}}">发表你的意见</a>吧～

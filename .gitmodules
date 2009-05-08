@@ -1,3 +1,6 @@
 [submodule "buddywall/pyxn"]
 	path = buddywall/pyxn
 	url = git://github.com/houyr/pyxn.git
+[submodule "ithink/pyxn"]
+	path = ithink/pyxn
+	url = git://github.com/houyr/pyxn.git

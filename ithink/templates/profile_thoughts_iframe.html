@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load xn %}
+{% block customjs %}
+<script type="text/javascript" language="JavaScript">
+    $(function(){
+		function vote(e){
+			e.preventDefault();
+			var type = e.data.type;
+			if(type == 'agree'){
+				var tid = e.target.id.substring(10);
+			}else{
+				var tid = e.target.id.substring(13);
+			}
+			var buttons_div = $('#vote_buttons_'+tid);
+			var buttons = buttons_div.html();
+			$.ajax({
+                url: '{% url vote %}',
+                data: {
+					'uid':'{{uid}}',
+					'session_key':'{{session_key}}',
+					'thought_id':tid,
+					'type':e.data.type
+				},
+                dataType: 'json',
+                timeout: 20000,
+                beforeSend: function(){
+					$('#vote_info_'+tid).show();
+					$('#vote_buttons_'+tid).hide();
+                    hideInfo();
+                    hideError();
+                },
+                success: function(data){
+					if(type == 'agree'){
+						$('#vote_info_'+tid).addClass('agree-text').html('我同意该想法');
+					}else if (type == 'disagree'){
+						$('#vote_info_'+tid).addClass('disagree-text').html('我不同意该想法');
+					}
+                },
+                error: function(){
+                    showErrorDlg('投票发生错误，请重试一次。',e);
+					$('#vote_info_'+tid).hide();
+					$('#vote_buttons_'+tid).show();
+                },
+                type: 'POST'
+            });
+		}
+		$('abbr[class*=timeago]').timeago();
+		$('.btn-agree').bind('click',{type:'agree'},vote);
+		$('.btn-disagree').bind('click',{type:'disagree'},vote);
+    });
+</script>
+{% endblock %}
+{% block content %}
+<div class="content">
+	<div class="info hidden clear-both" id="info_msg">
+    </div>
+    <div class="errors hidden clear-both" id="errors_msg">
+    </div>
+	<div class="clearfix"/>
+    <div class="box_container">
+    	<div class="paginator-bar">
+    		{% if has_prev %}<a target="_parent" href="{% xnurl profile_thoughts_cat_offset uid=profile_uid,cat=cat,offset=prev_offset %}" id="prev" class="link-prev">前{{page_len}}条</a>{% endif %}
+			{% if has_prev and has_next %} <span>|</span> {% endif %}
+			{% if has_next %}<a target="_parent" href="{% xnurl profile_thoughts_cat_offset uid=profile_uid,cat=cat,offset=offset %}" id='next' class="link-next">后{{page_len}}条</a>{% endif %}
+    	</div>
+    	<ul>
+		{% for thought in thoughts %}
+		<li>
+			<div class="compact-box">
+	            <div class="thought">
+	                <a target="_parent" href="{% xnurl thought_detail thought.key.id %}">{{thought}}</a>
+	            </div>
+	            <div class="content">
+	                <table>
+	                    <tbody>
+	                        <tr>
+	                            <td class="thumb">
+	                                <img src="{{thought.owner.pic_url}}"/>
+	                            </td>
+	                            <td>
+	                                <div class="note">{{thought.note}}</div>
+									<div class="author-info">
+										<div class="float-left">{{thought.owner}}在<abbr class="timeago" title="{{thought.date_created_str}}">{{thought.date_created_str}}</abbr>提出</div>
+										{% if thought.voted %}
+											{% if thought.agreed %}
+											<div class="float-right agree-text">我同意该想法</div>
+											{% else %}
+											<div class="float-right disagree-text">我不同意该想法</div>
+											{% endif %}
+										{% else %}
+										<div class="buttons float-right">
+											<div id="vote_info_{{thought.key.id}}" class="hidden">请稍候...</div>
+											<div id="vote_buttons_{{thought.key.id}}">
+												<a href="#" class="button btn-agree" id="btn_agree_{{thought.key.id}}">同意</a>
+												<a href="#" class="button btn-disagree" id="btn_disagree_{{thought.key.id}}">不同意</a>
+											</div>
+										</div>
+										{% endif %}
+									</div>
+									<div class="vote-results">{{thought.num_votes}}个投票，{{thought.percent_agreed}}%同意</div>
+									<div class="vote-actions">
+										<a class="link-comment" target="_parent" href="{% xnurl thought_detail thought.key.id %}">{% if thought.num_total_comments %}{{thought.num_total_comments}}条评论{%else%}来抢评论的沙发{%endif%}</a> 
+										<span>|</span> 
+										<a class="link-ask" target="_parent" href="{% xnurl recommend thought.key.id %}">问问朋友怎么想</a>
+									</div>
+									<div class="thought-tags">
+										{% if thought.get_tags|length %}
+										<span class="tags-label">主题标签：</span>
+										<ul>
+										{% for tag in thought.get_tags %}
+										<li><a href="{% xnurl tag_view tag.tag %}" target="_top">{{tag}}</a></li>
+										{% endfor %}
+										</ul>
+										{% endif %}
+									</div>
+	                            </td>
+	                        </tr>
+	                    </tbody>
+	                </table>
+	            </div>
+	        </div>
+		</li>
+		{% endfor %}
+		</ul>
+    </div>
+</div>{% endblock %}

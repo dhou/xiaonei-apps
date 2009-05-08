@@ -1,0 +1,6 @@
+{% extends "base.xnml" %}
+{% load xn %}
+{% block title %} 很有想法  | 新想法{% endblock %}
+{% block content %}
+<xn:iframe src="{{iframe_src}}" frameborder="0" width="778" height="700" scrolling="auto"/>
+{% endblock %}

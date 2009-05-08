@@ -1,0 +1,42 @@
+{% load xn %}
+<div class="paginator-bar">
+    {% if has_prev %}<a href="#" id="prev" class="link-prev">前{{page_len}}条</a>{% endif %}{% if has_prev and has_next %} <span>|</span>
+    {% endif %}{% if has_next %}<a href='#' id='next' class="link-next">后{{page_len}}条</a>{% endif %}
+</div>
+<ul>
+    {% for c in comments %}
+    <li class="comment">
+        <div class="thumb">
+            <a target="_parent" href="{% xnurl profile_def c.author.uid %}"><img src="{{c.author.pic_url}}" width="50"/></a>
+        </div>
+        <div class="comment-content">
+            <div class="comment-info">
+                <div class="float-left">{{c.author.username}} <abbr class="timeago" title='{{c.get_formated_date}}'>{{c.get_formated_date}}</abbr></div>
+				<div class="float-right">
+					{% if c.agreed %}<span class="agree-text">同意</span>{% else %}<span class="disagree-text">不同意</span>{% endif %}
+				</div>
+            </div>
+            <div class="comment-text">
+                {{c.content}}
+            </div>
+            <div class="comment-actions">
+                {% if c.replies_list %}<a href="#" id="showreply-{{c.key.id}}" class="show-reply">{% endif %}{{c.replies_list|length}}条回复{% if c.replies_lise %}</a>{% endif %} | <a href="#" class="open-reply" id="reply-{{c.key.id}}">回复</a>
+            </div>
+        </div>
+        <div class="replies hidden" id="replies_{{c.key.id}}">
+        </div>
+        <div class="new-reply hidden" id="new_reply_{{c.key.id}}">
+            <form action="{% url new_reply %}" id="form_reply_{{c.key.id}}">
+                <textarea rows="2" cols="40" class="input-text" name="reply" id="replytext_{{c.key.id}}"></textarea>
+                <div class="buttons">
+                    <a href="#" class="button btn-publish reply-publish" id="btnreply_{{c.key.id}}">发表</a>
+                    <a href="#" class="button btn-cancel reply-cancel" id="btncancel_{{c.key.id}}">取消</a>
+                </div>
+                <input type="hidden" name="uid" value="{{uid}}"/>
+				<input type="hidden" name="session_key" value="{{session_key}}"/>
+				<input type="hidden" name="thought_id" value="{{c.thought.key.id}}"/>
+				<input type="hidden" name="comment_id" value="{{c.key.id}}"/>
+            </form>
+        </div>
+    </li>{% endfor %}
+</ul><input type="hidden" id="offset" name="offset" value="{{offset}}"/>

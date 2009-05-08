@@ -1,0 +1,1 @@
+<a href="{{profile_url}}"><xn:name uid="{{uid}}" linked="false"/></a>给你的想法投了票，{% if agree %}非常同意{% else %}觉得不同意{% endif %}这个想法：“<a href="{{thought_url}}">{{thought}}</a>”

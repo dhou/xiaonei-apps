@@ -1,0 +1,96 @@
+{% extends "base.xnml" %}
+{% load xn %}
+{% block title %} 很有想法  | {{profile_name}}{% endblock %}
+{% block content %}
+<div class="new-media-shell clearfix" style="margin-bottom:5px;">
+    <a href="{% xnurl new %}" class="new-media">
+        <div class="tr">
+            <div class="bl">
+                <div class="br">
+                    <span>提出新想法</span>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
+<div class="gray-box">
+    <table style="width:100%;">
+    	<tbody>
+    		<tr>
+    			<td style="width:120px;"><xn:profile-pic uid="{{profile_uid}}" linked="true" size="normal"/></td>
+    			<td style="padding:0 5px;">
+				<h3><xn:name uid="{{profile_uid}}" linked="false"/></h3>
+				<p>提出的想法：{{num_thoughts}}个</p>
+				<p>投票：{{num_votes}}次</p>
+				<p>发表的评论：{{num_comments}}条</p>
+				</td>
+				<td style="width:220px;">
+				{% if not is_follower %}
+					<div class="new-media-shell clearfix" style="margin-bottom:5px;">
+					    <a href="{% xnurl follow_user from_uid=uid,to_uid=profile_uid %}" class="new-media">
+					        <div class="tr">
+					            <div class="bl">
+					                <div class="br">
+					                    <span>做{{profile_name}}的粉丝</span>
+					                </div>
+					            </div>
+					        </div>
+					    </a>
+					</div>
+				{% else %}
+				<div style="color:#339933;font-weight:bold;">我是{{profile_name}}的粉丝</div>
+				{% endif %}
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div>
+	<form name="note" action="profile/{{profile_uid}}/">
+		<p><input type="submit" class="input-submit" name="note-submit" value="给{{profile_name}}留言"/></p>
+		<textarea rows="2" cols="40" name="note" style="width:90%;height:50px;"></textarea>
+		<input type="hidden" name="profile-uid" value="{{profile_uid}}"/>
+	</form>
+</div>
+<div id="sub-nav" style="border-bottom: 0pt none; display: block; float: left; clear: left;width: 100%;">
+    <ul style="overflow:hidden;">
+        <li {% ifequal stuff 'thoughts' %} class="selected" {% endifequal %}>
+            <a href="{% xnurl profile_stuff_def profile_uid,"thoughts"%}">想法</a>
+        </li>
+        <li {% ifequal stuff 'notes' %} class="selected" {% endifequal %}>
+            <a href="{% xnurl profile_stuff_def profile_uid,"notes"%}">留言</a>
+        </li>
+        <li {% ifequal stuff 'followers' %} class="selected" {% endifequal %}>
+            <a href="{% xnurl profile_stuff_def profile_uid,"followers"%}">粉丝团</a>
+        </li>
+        <li {% ifequal stuff 'followings' %} class="selected" {% endifequal %}>
+            <a href="{% xnurl profile_stuff_def profile_uid,"followings"%}">关注的人</a>
+        </li>
+    </ul>
+</div>
+{% ifequal stuff "thoughts" %}
+<div style="border-top: 1px solid #cccccc; padding: 3px 0; margin-bottom: 3px; background-color: #eeeeee; text-align: center; overflow: auto;">
+    <a href="{% xnurl profile_thoughts_cat_def profile_uid,"created" %}" title="浏览{{profile_name}}提出的想法">
+    	{% ifequal cat "created"%}<span style="background:#6D84B4;color:#fff;">提出的想法</span>
+		{%else%}
+		提出的想法
+		{%endifequal%}
+	</a>
+    <span class="pipe">|</span>
+    <a href="{% xnurl profile_thoughts_cat_def profile_uid,"voted" %}" title="浏览{{profile_name}}投过票的想法">
+    	{% ifequal cat "voted"%}<span style="background:#6D84B4;color:#fff;">投过票的想法</span>
+		{%else%}
+    		投过票的想法
+		{% endifequal %}
+	</a>
+    <span class="pipe">|</span>
+    <a href="{% xnurl profile_thoughts_cat_def profile_uid,"commented" %}" title="浏览{{profile_name}}评论过的想法">
+    	{% ifequal cat "commented"%}<span style="background:#6D84B4;color:#fff;">评论过的想法</span>
+		{% else %}
+    	评论过的想法
+		{% endifequal %}
+	</a>
+</div>
+{% endifequal %}
+<xn:iframe src="{{iframe_src}}" frameborder="0" width="778" height="1500" scrolling="auto"/>
+{% endblock %}

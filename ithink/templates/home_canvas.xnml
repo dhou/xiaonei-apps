@@ -1,0 +1,59 @@
+{% extends "base.xnml" %}
+{% load xn %}
+{% block title %} 很有想法  | 大家的想法{% endblock %}
+{% block content %}
+<div class="new-media-shell clearfix" style="margin-bottom:5px;">
+    <a href="{% xnurl new %}" class="new-media">
+        <div class="tr">
+            <div class="bl">
+                <div class="br">
+                    <span>提出新想法</span>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
+<div class="gray-box">
+    <table>
+    	<tbody>
+    		<tr>
+    			<td><xn:profile-pic uid="{{uid}}" linked="true"/></td>
+    			<td style="padding:0 5px;"><h3><xn:name uid="{{uid}}" linked="false"/>，你好！</h3>
+				<p>很有想法的大家已经提出了{{num_thoughts}}个想法，你同意哪些，又不同意哪些呢？</p></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+{% if feature %}
+	<div class="feature-div">
+		<div class="feature-banner">今日推荐想法</div>
+		<xn:iframe src="{{ feature_url }}" frameborder="0" width="778" height="240" scrolling="auto"/>
+	</div>
+{% endif %}
+<div class="gray-box clearfix">
+	<h3 style="margin-bottom:0;">主题标签</h3>
+	<ul style="list-style-type:none;">
+		{% for tag in tags %}
+		<li style="display:inline;margin:5px 2px;font-size:{{tag.font_size_percent}}%;"><a href="{% xnurl tag_view tag.tag %}">{{tag}}</a></li>
+		{% endfor %}
+	</ul>
+	<div class="clearfix"></div>
+</div>
+<div id="sub-nav" style="border-bottom: 0pt none; display: block; float: left; clear: left;width: 100%;">
+    <ul style="overflow:hidden;">
+		<li {% ifequal sort 'latest' %} class="selected" {% endifequal %}>
+			<a href="{% xnurl home_sorted_def "latest" %}">最新</a>
+		</li>
+        <li {% ifequal sort 'votes' %} class="selected" {% endifequal %}>
+            <a href="{% xnurl home_sorted_def "votes"%}">投票最多</a>
+        </li>
+		<li {% ifequal sort 'comments' %} class="selected" {% endifequal %}>
+			<a href="{% xnurl home_sorted_def "comments" %}">评论最多</a>			
+		</li>
+		<li {% ifequal sort 'friends' %} class="selected" {% endifequal %}>
+			<a href="{% xnurl home_sorted_def "friends" %}">好友的想法</a>			
+		</li>
+    </ul>
+</div>
+<xn:iframe src="{{iframe_src}}" frameborder="0" width="778" height="1550" scrolling="auto"/>
+{% endblock %}

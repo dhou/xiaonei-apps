@@ -1,0 +1,18 @@
+{% extends "base.xnml" %}
+{% load xn %}
+{% block title %} 很有想法  | 查看想法{% endblock %}
+{% block content %}
+<xn:iframe src="{{iframe_src}}" frameborder="0" width="778" height="250" scrolling="auto"/>
+{% if recommended %}
+<div class="app-notice" style="margin-bottom:10px;">
+            <p>推荐通知已经成功发出给选定的朋友了～</p>
+</div>
+{% endif %}
+<div class="recommend-form">
+	<h2>推荐这个想法给好友（一次最多选20个）</h2>
+<form action="recommend/{{thought_id}}/">
+	<p><input type="submit" class="input-submit" name="recommend-submit" value="推荐给好友"/> <a href="{% xnurl home %}">跳过</a></p>
+	<xn:multi-friend-selector max="20" include_me="false"/> 
+</form>
+</div>
+{% endblock %}

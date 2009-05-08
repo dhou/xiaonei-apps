@@ -1,0 +1,14 @@
+{actor}提出了一个想法：“<a href="{thought_url}">{thought}</a>“
+{username}想知道大家是不是同意这个想法，快来<a href="{thought_url}">发表你的意见</a>吧～
+
+{actor}非常赞同这个想法：“<a href="{thought_url}">{thought}</a>”
+你同意吗？来<a href="{thought_url}">发表你的意见</a>吧！
+
+{actor}觉得不同意这个想法：“<a href="{thought_url}">{thought}</a>”
+你同意吗？来<a href="{thought_url}">发表你的意见</a>吧！
+
+{actor}对这个想法颇有感触：“<a href="{thought_url}">{thought}</a>”，不禁发表了评论
+你同意这个想法吗？也来<a href="{thought_url}">发表你的意见</a>吧！
+
+{actor}把“<a href="{thought_url}">{thought}</a>”推荐给了好友们，希望知道他们的看法
+你同意这个想法吗？也来<a href="{thought_url}">发表你的意见</a>吧！

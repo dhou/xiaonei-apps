@@ -1,0 +1,318 @@
+{% extends "base.html" %}
+{% load xn %}
+{% block customjs %}
+<script type="text/javascript" language="JavaScript">
+    $(function(){
+		function vote(e){
+			e.preventDefault();
+			var type = e.data.type;
+			if(type == 'agree'){
+				var tid = e.target.id.substring(10);
+			}else{
+				var tid = e.target.id.substring(13);
+			}
+			var buttons_div = $('#vote_buttons_'+tid);
+			var buttons = buttons_div.html();
+			$.ajax({
+                url: '{% url vote %}',
+                data: {
+					'uid':'{{uid}}',
+					'session_key':'{{session_key}}',
+					'thought_id':tid,
+					'type':e.data.type
+				},
+                dataType: 'json',
+                timeout: 20000,
+                beforeSend: function(){
+					$('#vote_info_'+tid).show();
+					$('#vote_buttons_'+tid).hide();
+                    hideInfo();
+                    hideError();
+                },
+                success: function(data){
+					if(type == 'agree'){
+						$('#vote_info_'+tid).addClass('agree-text').html('我同意该想法');
+					}else if (type == 'disagree'){
+						$('#vote_info_'+tid).addClass('disagree-text').html('我不同意该想法');
+					}
+                },
+                error: function(){
+                    showErrorDlg('投票发生错误，请重试一次。',e);
+					$('#vote_info_'+tid).hide();
+					$('#vote_buttons_'+tid).show();
+                },
+                type: 'POST'
+            });
+		}
+		function publishComment(e){
+			e.preventDefault();
+			if(validateComment(e)){
+				$.ajax({
+	                url: '{% url new_comment %}',
+	                data: $('#form_comment').serialize(),
+	                dataType: 'json',
+	                timeout: 20000,
+	                beforeSend: function(){
+	                    $('#publish_comment').addClass('btn-disabled').html('请稍候...').unbind('click');
+						$('#cancel_comment').addClass('btn-disabled').unbind('click');
+	                    hideInfo();
+	                    hideError();
+	                },
+	                success: function(data){
+						$('abbr[class*=timeago]').timeago();
+						$('#publish_comment').removeClass('btn-disabled').html('发表').click(publishComment);
+						$('#cancel_comment').removeClass('btn-disabled').click(cancelComment);
+						$('#new_comment_text').val('');
+						showInfo('评论发表成功！');
+	                },
+	                error: function(){
+	                    showErrorDlg('发表评论发生错误，请重试一次。',e);
+						$('#publish_comment').removeClass('btn-disabled').html('发表').click(publishComment);
+						$('#cancel_comment').removeClass('btn-disabled').click(cancelComment);
+	                },
+	                type: 'POST'
+	            });
+			}
+		}
+		function getNext(e){
+			e.preventDefault();
+			var type = e.data.type;
+			$.ajax({
+	            url: '{% url next_voters %}',
+	            data: {
+					'thought_id':'{{thought.key.id}}',
+					'offset':$('#offset_'+type).val(),
+					'type':type
+				},
+	            dataType: 'html',
+	            timeout: 20000,
+	            beforeSend: function(){
+					showSpinner(type);
+	                $('#next_'+type).unbind('click');
+	                $('#prev_'+type).unbind('click');
+	                hideInfo();
+	                hideError();
+	            },
+	            success: function(data){
+					$('#voters_'+type).html(data);
+					$('#next_'+type).bind('click',{type:type},getNext);
+					$('#prev_'+type).bind('click',{type:type},getPrev);
+					initEvents();
+	            },
+	            error: function(){
+					hideSpinner(type);
+	                showErrorDlg('获取数据失败，请重试一次。',e);
+					$('#next_'+type).bind('click',{type:type},getNext);
+					$('#prev_'+type).bind('click',{type:type},getPrev);
+	            },
+	            type: 'POST'
+	        });
+		}
+		function getPrev(e){
+			e.preventDefault()
+			var type = e.data.type;
+			$.ajax({
+	            url: '{% url prev_voters %}',
+	            data: {
+					'thought_id':'{{thought.key.id}}',
+					'offset':$('#offset_'+type).val(),
+					'type':type
+				},
+	            dataType: 'html',
+	            timeout: 20000,
+	            beforeSend: function(){
+					showSpinner(type);
+	                $('#next_'+type).unbind('click');
+	                $('#prev_'+type).unbind('click');
+	                hideInfo();
+	                hideError();
+	            },
+	            success: function(data){
+					$('#voters_'+type).html(data);
+					$('#next_'+type).bind('click',{type:type},getNext);
+					$('#prev_'+type).bind('click',{type:type},getPrev);
+					initEvents();
+	            },
+	            error: function(){
+					hideSpinner(type);
+	                showErrorDlg('获取数据失败，请重试一次。',e);
+					$('#next_'+type).bind('click',{type:type},getNext);
+					$('#prev_'+type).bind('click',{type:type},getPrev);
+	            },
+	            type: 'POST'
+	        });
+		}
+		function showSpinner(type){
+			$('#spinner_'+type).show();
+		}
+		function hideSpinner(){
+			$('#spinner_'+type).hide();
+		}
+		function validateComment(e){
+			var text = $('#new_comment_text').val();
+			if(text.length == 0){
+				showErrorDlg('还没填写评论内容呢！',e);
+				return false;
+			}else if(text.length > 500){
+				showErrorDlg('评论长度请不要超过500个字',e);
+				return false;
+			}else{
+				return true;
+			}
+		}
+		function cancelComment(e){
+			e.preventDefault();
+			$('#new_comment').slideUp();
+		}
+		function openComment(e){
+			e.preventDefault();
+			$('#new_comment').slideDown();
+		}
+		function initEvents(){
+			$('.btn-agree').bind('click',{type:'agree'},vote);
+			$('.btn-disagree').bind('click',{type:'disagree'},vote);
+			$('abbr[class*=timeago]').timeago();
+			$('#add_comment').click(openComment);
+			$('#cancel_comment').click(cancelComment);
+			$('#publish_comment').click(publishComment);
+			$('#next_agrees').bind('click',{type:'agrees'},getNext);
+			$('#prev_agrees').bind('click',{type:'agrees'},getPrev);
+			$('#next_disagrees').bind('click',{type:'disagrees'},getNext);
+			$('#prev_disagrees').bind('click',{type:'disagrees'},getPrev);
+		}
+		initEvents();
+    });
+</script>
+{% endblock %}
+{% block content %}
+<div class="content">
+    <div class="info hidden clear-both" id="info_msg">
+    </div>
+    <div class="errors hidden clear-both" id="errors_msg">
+    </div>
+    <div class="clearfix"/>
+    <div class="box-container">
+        <div class="detail-box">
+            <div class="thought">
+                {{thought}}
+            </div>
+            <div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td class="thumb">
+                                <a target="_parent" href="{% xnurl profile_def thought.owner.uid %}"><img src="{{thought.owner.pic_url}}"/></a>
+                            </td>
+                            <td>
+                                <div class="note">{{thought.note}}</div>
+								<div class="author-info">
+									<div class="float-left">{{thought.owner}}在<abbr class="timeago" title="{{date_created}}">{{date_created}}</abbr>提出</div>
+									{% if voted %}
+										{% if agreed %}
+										<div class="float-right agree-text">我同意该想法</div>
+										{% else %}
+										<div class="float-right disagree-text">我不同意该想法</div>
+										{% endif %}
+									{% else %}
+									<div class="float-right" id="vote_buttons">
+										<div id="vote_info_{{thought.key.id}}" class="hidden">请稍候...</div>
+										<div id="vote_buttons_{{thought.key.id}}">
+											<a href="#" class="button btn-agree" id="btn_agree_{{thought.key.id}}">同意</a>
+											<a href="#" class="button btn-disagree" id="btn_disagree_{{thought.key.id}}">不同意</a>
+										</div>
+									</div>
+									{% endif %}
+								</div>
+								<div class="vote-results">{{thought.num_votes}}个投票，{{percent_agreed}}%同意，{{thought.num_total_comments}}条评论</div>
+								<div class="vote-actions">
+									<a class="link-comment" href="#" id="add_comment">评论</a> <span>|</span> <a class="link-ask" target="_parent" href="{% xnurl recommend thought.key.id %}">问问朋友怎么想</a>
+								</div>
+								<div class="thought-tags">
+									{% if thought.get_tags|length %}
+									<span class="tags-label">主题标签：</span>
+									<ul>
+									{% for tag in thought.get_tags %}
+									<li><a href="{% xnurl tag_view tag.tag %}" target="_top">{{tag}}</a></li>
+									{% endfor %}
+									</ul>
+									{% endif %}
+								</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="content">
+            </div>
+        </div>
+		<div class="new-comment hidden" id="new_comment">
+			<form id="form_comment" action="{% url new_comment %}">
+				<textarea rows="2" cols="40" class="input-text" name="comment" id="new_comment_text"></textarea>
+			<div class="buttons">
+				<a href="#" class="button btn-publish" id="publish_comment">发表</a>
+				<a href="#" class="button btn-cancel" id="cancel_comment">取消</a>
+				<input type="hidden" name="uid" value="{{uid}}"/>
+				<input type="hidden" name="session_key" value="{{session_key}}"/>
+				<input type="hidden" name="thought_id" value="{{thought.key.id}}"/>
+			</div>
+			</form>
+		</div>
+		<div class="voters" id="voters_agrees">
+			<div class="paginator-bar">
+				<h3>投赞成票的人</h3>
+			</div>
+			<div class="box-sub">
+				<div id="spinner_agrees" class="spinner hidden"></div>
+				{% if has_prev_agrees %}
+				<a href="#" id="prev_agrees" class="link-prev">前{{page_len}}个</a>
+				{% endif %}
+				{% if has_prev_agrees and has_next_agrees %} <span>|</span> {% endif %}
+				{% if has_next_agrees %}<a href='#' id='next_agrees' class="link-next">后{{page_len}}个</a>{% endif %}
+			</div>
+			<ul id="agreed_list" class="thumb-list">
+				{% for v in agreed_voters %}
+				<li class="voter">
+					<div class="person-box">
+			            <div class="thumb">
+			                <a target="_parent" href="{% xnurl profile_def v.uid %}"><img src="{{v.pic_url}}"/></a>
+			            </div>
+			            <div class="person-info">
+							<p>{{v.username}}</p>
+							<p class="agree-text">同意</p>
+			            </div>
+			        </div>
+				</li>
+				{% endfor %}
+				<input type="hidden" id="offset_agrees" name="agreed_offset" value="{{agreed_offset}}"/>
+			</ul>
+		</div>
+		<div class="clearfix clear-both"></div>
+		<div class="voters" id="voters_disagrees">
+			<div class="paginator-bar">
+				<h3>投反对票的人</h3>
+			</div>
+		    <div class="box-sub">
+				<div id="spinner_disagrees" class="spinner hidden"></div>
+		    	{% if has_prev_disagrees %}<a href="#" id="prev_disagrees" class="link-prev">前{{page_len}}个</a>{% endif %}
+				{% if has_prev_disagrees and has_next_disagrees %} <span>|</span> {% endif %}
+				{% if has_next_disagrees %}<a href='#' id='next_disagrees' class="link-next">后{{page_len}}个</a>{% endif %}
+			</div>
+			<ul id="disagreed_list" class="thumb-list">
+				{% for v in disagreed_voters %}
+				<li class="voter">
+					<div class="person-box">
+			            <div class="thumb">
+			                <a target="_parent" href="{% xnurl profile_def v.uid %}"><img src="{{v.pic_url}}"/></a>
+			            </div>
+			            <div class="person-info">
+							<p>{{v.username}}</p>
+							<p class="disagree-text">不同意</p>
+			            </div>
+			        </div>
+				</li>
+				{% endfor %}
+				<input type="hidden" id="offset_disagrees" name="disagreed_offset" value="{{disagreed_offset}}"/>
+			</ul>
+		</div>
+    </div>
+</div>{% endblock %}

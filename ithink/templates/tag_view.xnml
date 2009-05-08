@@ -1,0 +1,49 @@
+{% extends "base.xnml" %}
+{% load xn %}
+{% block title %}很有想法  | {{tag}}{% endblock %}
+{% block content %}
+<div class="new-media-shell clearfix" style="margin-bottom:5px;">
+    <a href="{% xnurl new %}" class="new-media">
+        <div class="tr">
+            <div class="bl">
+                <div class="br">
+                    <span>提出新想法</span>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
+{% if tag %}
+<div class="gray-box">
+	<h3 style="margin-bottom:0;">浏览当前主题：<span style="color:#3B5998;font-size:120%;">{{tag}}</span></h3>
+</div>
+{% endif %}
+<div class="gray-box clearfix">
+	<h3 style="margin-bottom:0;">热门主题标签</h3>
+	<ul style="list-style-type:none;">
+		{% for tag in tags %}
+		<li style="display:inline;margin:5px 2px;font-size:{{tag.font_size_percent}}%;"><a href="{% xnurl tag_view tag.tag %}">{{tag}}</a></li>
+		{% endfor %}
+	</ul>
+	<div class="clearfix"></div>
+</div>
+{% if tag %}
+<div id="sub-nav" style="padding-top:0;border-bottom: 0pt none; display: block; float: left; clear: left;width: 100%;">
+    <ul style="overflow:hidden;">
+        <li {% ifequal sort 'votes' %} class="selected" {% endifequal %}>
+            <a href="{% xnurl tag_view_sorted_def tag,"votes"%}">投票最多</a>
+        </li>
+		<li {% ifequal sort 'comments' %} class="selected" {% endifequal %}>
+			<a href="{% xnurl tag_view_sorted_def tag,"comments" %}">评论最多</a>			
+		</li>
+		<li {% ifequal sort 'latest' %} class="selected" {% endifequal %}>
+			<a href="{% xnurl tag_view_sorted_def tag,"latest" %}">最新</a>
+		</li>
+		<li {% ifequal sort 'friends' %} class="selected" {% endifequal %}>
+			<a href="{% xnurl tag_view_sorted_def tag,"friends" %}">好友的想法</a>			
+		</li>
+    </ul>
+</div>
+<xn:iframe src="{{iframe_src}}" frameborder="0" width="778" height="1450" scrolling="auto"/>
+{% endif %}
+{% endblock %}

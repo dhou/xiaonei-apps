@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load xn %}
+{% block customjs %}
+<script type="text/javascript" language="JavaScript">
+    $(function(){
+		$('abbr[class*=timeago]').timeago();
+    });
+</script>
+{% endblock %}
+{% block content %}
+<div class="content">
+	<div class="info hidden clear-both" id="info_msg">
+    </div>
+    <div class="errors hidden clear-both" id="errors_msg">
+    </div>
+	<div class="clearfix"/>
+    <div class="box_container">
+    	<div class="paginator-bar">
+    		{% if has_prev %}<a target="_parent" href="{% xnurl people_cat_offset cat=cat,offset=prev_offset %}" id="prev" class="link-prev">前{{page_len}}个</a>{% endif %}
+			{% if has_prev and has_next %} <span>|</span> {% endif %}
+			{% if has_next %}<a target="_parent" href="{% xnurl people_cat_offset cat=cat,offset=offset %}" id='next' class="link-next">后{{page_len}}个</a>{% endif %}
+    	</div>
+    	<ul class="thumb-list">
+		{% for p in people %}
+		<li>
+			<div class="person-box">
+	            <div class="thumb">
+	                <a target="_parent" href="{% xnurl profile_def p.uid %}"><img src="{{p.pic_url}}"/></a>
+	            </div>
+	            <div class="person-info">
+					<p>{{p.username}}</p>
+	            	{% switch cat %}
+					{% case 'thoughts' %}
+					<h3>{{p.num_thoughts}}个想法</h3>
+					{% endcase %}
+					{% case 'votes' %}
+					<h3>{{p.num_votes}}个投票</h3>
+					{% endcase %}
+					{% case 'comments' %}
+					<h3>{{p.num_comments}}条评论</h3>
+					{% endcase %}
+					{% case 'followers' %}
+					<h3>{{p.num_followers}}个粉丝</h3>
+					{% endcase %}
+					{% endswitch %}
+	            </div>
+	        </div>
+		</li>
+		{% endfor %}
+		</ul>
+    </div>
+</div>{% endblock %}

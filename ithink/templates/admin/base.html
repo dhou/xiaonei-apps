@@ -1,0 +1,23 @@
+{% load xn %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+    	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<link rel="stylesheet" href="{{MEDIA_URL}}css/master.css" type="text/css" />
+        <!--[if lt IE 7]>
+            <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/ie6.css" />
+        <![endif]-->
+		{% block customcss %}{% endblock %}
+        <script src="{{MEDIA_URL}}js/jquery-1.2.6.min.js"></script>
+		<script src="{{MEDIA_URL}}js/application-min.js"></script>
+        {% block customjs %}{% endblock %}
+        {% block head%}{% endblock %}
+		<title>{% block title %}A Generic Title{% endblock %}</title>
+    </head>
+    <body>
+        <div id='wrapper'>
+            {% block content %}
+            {% endblock %}
+        </div>
+    </body>
+</html>
